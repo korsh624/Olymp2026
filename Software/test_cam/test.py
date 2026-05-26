@@ -1,14 +1,15 @@
 import cv2
 import numpy as np
-
+import serial
+import time
 # =========================
 # Настройки
 # =========================
 WIDTH = 1280
 HEIGHT = 720
-
+SHOW=True
 # Максимальная скорость
-MAX_SPEED = 120
+MAX_SPEED = 60
 
 # Коэффициенты ПИД
 KP = 0.25
@@ -20,7 +21,8 @@ last_error = 0
 # Камера
 # =========================
 cap = cv2.VideoCapture(0)
-
+ser = serial.Serial('/dev/ttyUSB0', 115200)
+time.sleep(2)
 cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, WIDTH)
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, HEIGHT)
@@ -137,44 +139,44 @@ while True:
     speed = MAX_SPEED - abs(steering) * 1.5
 
     speed = int(np.clip(speed, 40, MAX_SPEED))
+    if SHOW:
 
-    # -----------------------------------
-    # Отображение
-    # -----------------------------------
-    cv2.line(frame, (center_image, 0), (center_image, h), (255, 0, 0), 2)
+        # -----------------------------------
+        # Отображение
+        # -----------------------------------
+        cv2.line(frame, (center_image, 0), (center_image, h), (255, 0, 0), 2)
 
-    cv2.circle(frame, (road_center, h // 2), 8, (0, 0, 255), -1)
+        cv2.circle(frame, (road_center, h // 2), 8, (0, 0, 255), -1)
 
-    cv2.putText(
-        frame,
-        f"ANGLE: {steering}",
-        (20, 40),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        1,
-        (0, 255, 255),
-        2
-    )
-
-    cv2.putText(
-        frame,
-        f"SPEED: {speed}",
-        (20, 80),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        1,
-        (0, 255, 255),
-        2
-    )
-
-    cv2.imshow("mask", mask)
-    cv2.imshow("frame", frame)
-
+        cv2.putText(
+            frame,
+            f"ANGLE: {steering}",
+            (20, 40),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (0, 255, 255),
+            2
+        )
+        cv2.putText(
+            frame,
+            f"SPEED: {speed}",
+            (20, 80),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            1,
+            (0, 255, 255),
+            2
+        )
+        cv2.imshow("mask", mask)
+        cv2.imshow("frame", frame)
     # -----------------------------------
     # Отправка в Arduino
     # -----------------------------------
     # Пример:
     # serial.write(f"{speed},{steering}\n".encode())
-
-    print(f"speed={speed} angle={steering}")
+    data = f"{speed},{steering}\n"
+    ser.write(data.encode())
+    print(data)
+    time.sleep(0.05)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
