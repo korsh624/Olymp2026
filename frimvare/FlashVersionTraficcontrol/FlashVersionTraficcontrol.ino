@@ -19,18 +19,18 @@ String wifiPASS = "";
 
 void setLight(String color)
 {
-    digitalWrite(RED_LED, LOW);
-    digitalWrite(YELLOW_LED, LOW);
-    digitalWrite(GREEN_LED, LOW);
+  digitalWrite(RED_LED, LOW);
+  digitalWrite(YELLOW_LED, LOW);
+  digitalWrite(GREEN_LED, LOW);
 
-    if (color == "red")
-        digitalWrite(RED_LED, HIGH);
+  if (color == "red")
+    digitalWrite(RED_LED, HIGH);
 
-    if (color == "yellow")
-        digitalWrite(YELLOW_LED, HIGH);
+  if (color == "yellow")
+    digitalWrite(YELLOW_LED, HIGH);
 
-    if (color == "green")
-        digitalWrite(GREEN_LED, HIGH);
+  if (color == "green")
+    digitalWrite(GREEN_LED, HIGH);
 }
 
 
@@ -40,62 +40,62 @@ void setLight(String color)
 
 void loadWiFiSettings()
 {
-    prefs.begin("wifi", true);
+  prefs.begin("wifi", true);
 
-    wifiSSID = prefs.getString("ssid", "");
-    wifiPASS = prefs.getString("pass", "");
+  wifiSSID = prefs.getString("ssid", "");
+  wifiPASS = prefs.getString("pass", "");
 
-    prefs.end();
+  prefs.end();
 }
 
 void saveWiFiSettings()
 {
-    prefs.begin("wifi", false);
+  prefs.begin("wifi", false);
 
-    prefs.putString("ssid", wifiSSID);
-    prefs.putString("pass", wifiPASS);
+  prefs.putString("ssid", wifiSSID);
+  prefs.putString("pass", wifiPASS);
 
-    prefs.end();
+  prefs.end();
 
-    Serial.println("WiFi настройки сохранены.");
+  Serial.println("WiFi настройки сохранены.");
 }
 
 void connectWiFi()
 {
-    if (wifiSSID.length() == 0)
-    {
-        Serial.println("SSID не задан.");
-        return;
-    }
+  if (wifiSSID.length() == 0)
+  {
+    Serial.println("SSID не задан.");
+    return;
+  }
 
-    Serial.println();
-    Serial.print("Подключение к ");
-    Serial.println(wifiSSID);
+  Serial.println();
+  Serial.print("Подключение к ");
+  Serial.println(wifiSSID);
 
-    WiFi.mode(WIFI_STA);
-    WiFi.begin(wifiSSID.c_str(), wifiPASS.c_str());
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(wifiSSID.c_str(), wifiPASS.c_str());
 
-    int cnt = 0;
+  int cnt = 0;
 
-    while (WiFi.status() != WL_CONNECTED && cnt < 30)
-    {
-        delay(500);
-        Serial.print(".");
-        cnt++;
-    }
+  while (WiFi.status() != WL_CONNECTED && cnt < 30)
+  {
+    delay(500);
+    Serial.print(".");
+    cnt++;
+  }
 
-    Serial.println();
+  Serial.println();
 
-    if (WiFi.status() == WL_CONNECTED)
-    {
-        Serial.println("WiFi подключен");
-        Serial.print("IP: ");
-        Serial.println(WiFi.localIP());
-    }
-    else
-    {
-        Serial.println("Подключение не удалось");
-    }
+  if (WiFi.status() == WL_CONNECTED)
+  {
+    Serial.println("WiFi подключен");
+    Serial.print("IP: ");
+    Serial.println(WiFi.localIP());
+  }
+  else
+  {
+    Serial.println("Подключение не удалось");
+  }
 }
 
 
@@ -105,7 +105,7 @@ void connectWiFi()
 
 void handleRoot()
 {
-    String html = R"rawliteral(
+  String html = R"rawliteral(
 <!DOCTYPE html>
 <html>
 <head>
@@ -278,6 +278,18 @@ void setup()
 
     Serial.println();
     Serial.println("ESP32 готова.");
+    digitalWrite(GREEN_LED, HIGH);
+    delay(500);
+    digitalWrite(YELLOW_LED, HIGH);
+    delay(500);
+    digitalWrite(RED_LED, HIGH);
+    delay(500);
+    digitalWrite(GREEN_LED, LOW);
+    delay(500);
+    digitalWrite(YELLOW_LED, LOW);
+    delay(500);
+    digitalWrite(RED_LED, LOW);
+    delay(500);
 }
 
 
