@@ -20,8 +20,8 @@ last_error = 0
 # =========================
 # Камера
 # =========================
-cap = cv2.VideoCapture(0)
-ser = serial.Serial('/dev/ttyUSB0', 115200)
+cap = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+ser = serial.Serial('COM19', 115200)
 time.sleep(2)
 cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, WIDTH)
