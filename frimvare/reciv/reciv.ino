@@ -91,7 +91,7 @@ void parseData(String data)
     int angle = SERVO_CENTER + data.substring(commaIndex + 1).toInt();
 
     speedPercent = constrain(speedPercent, -100, 100);
-    angle = constrain(angle, 60, 120);
+    angle = constrain(angle, 70, 110);
 
     // ==========================
     // ESC
